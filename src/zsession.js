@@ -338,11 +338,12 @@ Zmodem.Session = class ZmodemSession extends _Eventer {
             //We shouldn’t ever expect to receive an abort. Even if we
             //have sent an abort ourselves, the Sentry should have stopped
             //directing input to this Session object.
-            //if (this._expect_abort) {
+            // if (this._expect_abort) {
             //    return true;
-            //}
+            // }
+            return true;
 
-            throw new Zmodem.Error("peer_aborted");
+            // throw new Zmodem.Error("peer_aborted");
         }
     }
 

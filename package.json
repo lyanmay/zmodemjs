@@ -1,6 +1,6 @@
 {
-  "name": "@nora/zmodem.js",
-  "version": "0.1.10",
+  "name": "nora-zmodemjs",
+  "version": "1.1.1",
   "main": "./dist/zmodem.js",
   "module": "./dist/zmodem.js",
   "description": "ZMODEM file transfers in JavaScript",
