@@ -96,6 +96,7 @@ Zmodem.Browser = {
 
                 return new Promise( function(res) {
                     var reader = new FileReader();
+                    reader.readAsArrayBuffer(cur_b.obj);
 
                     //This really shouldn’t happen … so let’s
                     //blow up if it does.
@@ -106,18 +107,17 @@ Zmodem.Browser = {
 
                     var piece;
                     reader.onprogress = function reader_onprogress(e) {
-
                         //Some browsers (e.g., Chrome) give partial returns,
                         //while others (e.g., Firefox) don’t.
+                        // 只有文件读取完毕才能取到result值，所以此处无效
                         if (e.target.result) {
                             piece = new Uint8Array(e.target.result, xfer.get_offset())
-
                             _check_aborted(session);
 
                             xfer.send(piece);
 
                             if (options.on_progress) {
-                                options.on_progress(cur_b.obj, xfer, piece);
+                              options.on_progress(cur_b.obj, xfer, piece);
                             }
                         }
                     };
@@ -143,8 +143,6 @@ Zmodem.Browser = {
                             res( promise_callback() );
                         } );
                     };
-
-                    reader.readAsArrayBuffer(cur_b.obj);
                 } );
             } );
         }

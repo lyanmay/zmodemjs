@@ -1,6 +1,8 @@
 {
-  "name": "zmodem.js",
+  "name": "@nora/zmodem.js",
   "version": "0.1.10",
+  "main": "./dist/zmodem.js",
+  "module": "./dist/zmodem.js",
   "description": "ZMODEM file transfers in JavaScript",
   "devDependencies": {
     "babel-minify-webpack-plugin": "^0.2.0",
@@ -21,11 +23,12 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "tape ./tests/*.js"
+    "test": "tape ./tests/*.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FGasper/zmodemjs.git"
+    "url": "git+https://github.com/lyanmay/zmodemjs.git"
   },
   "keywords": [
     "zmodem",
@@ -40,9 +43,9 @@
   "author": "Gasper Software Consulting (http://gaspersoftware.com)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/FGasper/zmodemjs/issues"
+    "url": "https://github.com/lyanmay/zmodemjs/issues"
   },
-  "homepage": "https://github.com/FGasper/zmodemjs#readme",
+  "homepage": "https://github.com/lyanmay/zmodemjs#readme",
   "dependencies": {
     "crc-32": "^1.1.1"
   }

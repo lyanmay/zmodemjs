@@ -967,17 +967,20 @@ var Transfer_Offer_Mixin = {
  *
  * @mixes Transfer_Offer_Mixin
  */
-class Transfer {
+class Transfer extends _Eventer {
 
     /**
      * Not called directly.
      */
     constructor(file_info, offset, send_func, end_func) {
+        super();
         this._file_info = file_info;
         this._file_offset = offset || 0;
 
         this._send = send_func;
         this._end = end_func;
+
+        this._Add_event("send_progress");
     }
 
     /**
@@ -1440,14 +1443,15 @@ Zmodem.Session.Send = class ZmodemSendSession extends Zmodem.Session {
 
                         zrpos_handler_setter_func();
 
-                        res(
-                            new Transfer(
-                                params,
-                                hdr.get_offset(),
-                                sess._send_interim_file_piece.bind(sess),
-                                sess._end_file.bind(sess)
-                            )
-                        );
+                        let transfer = new Transfer(
+                          params,
+                          hdr.get_offset(),
+                          sess._send_interim_file_piece.bind(sess),
+                          sess._end_file.bind(sess)
+                      )
+                        this._current_transfer = transfer
+
+                        res(transfer);
                     },
                 };
             } );
@@ -1626,7 +1630,7 @@ Zmodem.Session.Send = class ZmodemSendSession extends Zmodem.Session {
 
         //We have to go through at least once in event of an
         //empty buffer, e.g., an empty end_file.
-        while (true) {
+          while (true) {
             var chunk_size = Math.min(obj_offset + MAX_CHUNK_LENGTH, bytes_count) - obj_offset;
 
             var at_end = (chunk_size + obj_offset) >= bytes_count;
@@ -1643,8 +1647,15 @@ Zmodem.Session.Send = class ZmodemSendSession extends Zmodem.Session {
 
             this._file_offset += chunk_size;
             obj_offset += chunk_size;
+            if (this._current_transfer) {
+              this._current_transfer._Happen("send_progress", (obj_offset / bytes_count * 100).toFixed(2));
+          }
 
-            if (obj_offset >= bytes_count) break;
+            if (obj_offset >= bytes_count) {
+              this._current_transfer._Happen("send_progress", 100.00);
+              this._current_transfer = null;
+              break;
+            }
         }
     }
 
